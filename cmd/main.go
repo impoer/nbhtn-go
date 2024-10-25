@@ -45,7 +45,7 @@ func main() {
 	r.HandleFunc("/user/{id}", auth.TokenValid(auth.GetUserByID)).Methods("GET")
 	r.HandleFunc("/refresh", auth.RefreshAccessToken).Methods("POST")
 
-	allowedOrigins := handlers.AllowedOrigins([]string{"http://localhost:3000"})
+	allowedOrigins := handlers.AllowedOrigins([]string{"http://nbhtn.s3-website-us-east-1.amazonaws.com"})
 	allowedMethods := handlers.AllowedMethods([]string{"POST", "GET", "OPTIONS"})
 	allowedHeaders := handlers.AllowedHeaders([]string{"Content-Type", "Authorization"})
 
