@@ -14,11 +14,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
-      - name: Install Docker Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y docker-compose
-
       - name: Build Docker images
         run: |
           docker-compose build
@@ -44,6 +39,14 @@ jobs:
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@18.206.155.178 '
             docker load -i /home/ec2-user/myapp.tar &&
-            docker-compose up -d
+            docker stop myapp || true &&
+            docker rm myapp || true &&
+            docker run -d --name myapp --network my_network \
+              -p 8080:8080 \
+              -e DATABASE_HOST=myapp-db \
+              -e DATABASE_PORT=5432 \
+              -e DATABASE_USER=postgres \
+              -e DATABASE_PASSWORD=swagimpoe123 \
+              -e DATABASE_NAME=auth_db \
+              myapp:latest
           '
-          
