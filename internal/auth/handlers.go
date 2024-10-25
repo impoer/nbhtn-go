@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+	"log"
 	"net/http"
 	"time"
 
@@ -18,6 +19,7 @@ func SetDB(database *sql.DB) {
 }
 
 func generateJWT(email string) (string, error) {
+	log.Printf("LoG")
 	claims := jwt.MapClaims{}
 	claims["authorized"] = true
 	claims["email"] = email
@@ -33,6 +35,7 @@ func generateJWT(email string) (string, error) {
 }
 
 func RegisterUser(w http.ResponseWriter, r *http.Request) {
+	log.Printf("LoG1")
 	w.Header().Set("Content-Type", "application/json")
 
 	var user User
@@ -75,6 +78,7 @@ func RegisterUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func LoginUser(w http.ResponseWriter, r *http.Request) {
+	log.Printf("LoG2")
 	w.Header().Set("Content-Type", "application/json")
 
 	var user User
@@ -130,6 +134,7 @@ func jsonError(code string, message string) string {
 }
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	log.Printf("LoG3")
 	w.Header().Set("Content-Type", "application/json")
 
 	rows, err := db.Query(`SELECT id, name, email FROM users`)
@@ -159,6 +164,7 @@ func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 }
 
 func GetUserByID(w http.ResponseWriter, r *http.Request) {
+	log.Printf("LoG4")
 	w.Header().Set("Content-Type", "application/json")
 
 	vars := mux.Vars(r)
@@ -185,6 +191,7 @@ func GetUserByID(w http.ResponseWriter, r *http.Request) {
 }
 
 func generateRefreshToken(email string) (string, error) {
+	log.Printf("LoG5")
 	claims := jwt.MapClaims{}
 	claims["email"] = email
 	claims["exp"] = time.Now().Add(time.Hour * 24 * 7).Unix()
@@ -199,6 +206,7 @@ func generateRefreshToken(email string) (string, error) {
 }
 
 func TokenValid(next http.HandlerFunc) http.HandlerFunc {
+	log.Printf("LoG6")
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader == "" {
@@ -228,6 +236,7 @@ func TokenValid(next http.HandlerFunc) http.HandlerFunc {
 }
 
 func RefreshAccessToken(w http.ResponseWriter, r *http.Request) {
+	log.Printf("LoG7")
 	w.Header().Set("Content-Type", "application/json")
 
 	var tokens Tokens
