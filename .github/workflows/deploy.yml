@@ -1,3 +1,5 @@
+name: Build and Deploy
+
 on:
   push:
     branches:
@@ -26,7 +28,7 @@ jobs:
 
       - name: Save Docker image to a file
         run: |
-          docker save myapp -o myapp.tar || echo "Image 'myapp' not found. Please check the build step."
+          docker save myapp:latest -o myapp.tar || echo "Image 'myapp:latest' not found. Please check the build step."
 
       - name: Upload Docker image to EC2
         env:

@@ -15,6 +15,7 @@ services:
       DATABASE_USER: postgres
       DATABASE_PASSWORD: swagimpoe123
       DATABASE_NAME: auth_db
+    image: myapp:latest  # Ensure the image has the correct name and tag
 
   db:
     image: postgres:14
