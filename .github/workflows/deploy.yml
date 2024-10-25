@@ -25,7 +25,7 @@ jobs:
         run: go test ./...
 
       - name: Build the project
-        run: go build -o myapp ./...  # Збирає ваш проєкт
+        run: go build .
 
       # - name: Deploy to AWS
       #   env:
