@@ -32,6 +32,9 @@ func main() {
 	database := db.InitDB(host, port, user, password, dbname) // Передаем port как int
 	defer database.Close()                                    // Закрыть соединение после использования
 
+	// Создание таблиц
+	db.CreateTables(database)
+
 	auth.SetDB(database) // Установить базу данных в пакет auth
 
 	r := mux.NewRouter()
