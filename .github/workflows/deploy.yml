@@ -24,18 +24,18 @@ jobs:
       - name: Run tests
         run: go test ./...
 
-      # - name: Build the project
-      #   run: go build .
+      - name: Build the project
+        run: go build -o myapp ./cmd
 
-      # - name: Deploy to AWS
-      #   env:
-      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Додає доступ до AWS
-      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     AWS_REGION: 'us-east-1'  # Вкажіть свій регіон AWS
-      #     EC2_INSTANCE_ID: 'your-ec2-instance-id'  # Вкажіть ідентифікатор вашого EC2
-      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Ваш приватний ключ SSH
-      #   run: |
-      #     echo "$SSH_PRIVATE_KEY" > private_key.pem
-      #     chmod 600 private_key.pem
-      #     scp -o StrictHostKeyChecking=no -i private_key.pem myapp ec2-user@<your-ec2-public-ip>:/home/ec2-user/  # Копіює бінар на EC2
-      #     ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@<your-ec2-public-ip> 'nohup ./myapp &'
+      - name: Deploy to AWS
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'us-east-1'
+          EC2_INSTANCE_ID: 'i-0b9425876ea5ba004'
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        run: |
+          echo "$SSH_PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+          scp -o StrictHostKeyChecking=no -i private_key.pem myapp ec2-user@18.206.155.178:/home/ec2-user/
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@18.206.155.178 'nohup ./myapp &'
