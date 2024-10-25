@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  myapp:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: swagimpoe123
+      DATABASE_NAME: auth_db
+
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: swagimpoe123
+      POSTGRES_DB: auth_db
+    ports:
+      - "5432:5432"

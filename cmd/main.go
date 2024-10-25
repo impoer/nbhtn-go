@@ -3,6 +3,8 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
+	"strconv"
 
 	"user-auth/internal/auth"
 	"user-auth/internal/db"
@@ -11,20 +13,37 @@ import (
 	"github.com/gorilla/mux"
 )
 
-const (
-	host     = "localhost"
-	port     = 5432 // Держим port как int
-	user     = "postgres"
-	password = "swagimpoe123"
-	dbname   = "auth_db"
-)
-
 func main() {
-	// Инициализация базы данных
-	database := db.InitDB(host, port, user, password, dbname) // Передаем port как int
-	defer database.Close()                                    // Закрыть соединение после использования
+	host := os.Getenv("DATABASE_HOST")
+	if host == "" {
+		host = "localhost"
+	}
+	portStr := os.Getenv("DATABASE_PORT")
+	port := 5432
+	if portStr != "" {
+		var err error
+		port, err = strconv.Atoi(portStr)
+		if err != nil {
+			log.Fatalf("Invalid port number: %v", err)
+		}
+	}
+	user := os.Getenv("DATABASE_USER")
+	if user == "" {
+		user = "postgres"
+	}
+	password := os.Getenv("DATABASE_PASSWORD")
+	if password == "" {
+		password = "swagimpoe123"
+	}
+	dbname := os.Getenv("DATABASE_NAME")
+	if dbname == "" {
+		dbname = "auth_db"
+	}
 
-	auth.SetDB(database) // Установить базу данных в пакет auth
+	database := db.InitDB(host, port, user, password, dbname)
+	defer database.Close()
+
+	auth.SetDB(database)
 
 	r := mux.NewRouter()
 
