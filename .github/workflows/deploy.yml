@@ -1,0 +1,41 @@
+name: Deploy Go Application
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.23.2'
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Run tests
+        run: go test ./...
+
+      - name: Build the project
+        run: go build -o myapp ./...  # Збирає ваш проєкт
+
+      # - name: Deploy to AWS
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Додає доступ до AWS
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: 'us-east-1'  # Вкажіть свій регіон AWS
+      #     EC2_INSTANCE_ID: 'your-ec2-instance-id'  # Вкажіть ідентифікатор вашого EC2
+      #     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}  # Ваш приватний ключ SSH
+      #   run: |
+      #     echo "$SSH_PRIVATE_KEY" > private_key.pem
+      #     chmod 600 private_key.pem
+      #     scp -o StrictHostKeyChecking=no -i private_key.pem myapp ec2-user@<your-ec2-public-ip>:/home/ec2-user/  # Копіює бінар на EC2
+      #     ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@<your-ec2-public-ip> 'nohup ./myapp &'
