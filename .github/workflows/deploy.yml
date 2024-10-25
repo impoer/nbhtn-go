@@ -24,8 +24,8 @@ jobs:
       - name: Run tests
         run: go test ./...
 
-      - name: Build the project
-        run: go build .
+      # - name: Build the project
+      #   run: go build .
 
       # - name: Deploy to AWS
       #   env:
