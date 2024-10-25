@@ -39,3 +39,4 @@ jobs:
           chmod 600 private_key.pem
           scp -o StrictHostKeyChecking=no -i private_key.pem myapp ec2-user@18.206.155.178:/home/ec2-user/
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@18.206.155.178 'nohup ./myapp &'
+          
