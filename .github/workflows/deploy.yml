@@ -14,6 +14,11 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
+      - name: Install Docker Compose
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y docker-compose
+
       - name: Build Docker images
         run: |
           docker-compose build
@@ -29,7 +34,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          scp -o StrictHostKeyChecking=no -i private_key.pem myapp.tar docker-compose.yml ec2-user@18.206.155.178:/home/ec2-user/
+          scp -o StrictHostKeyChecking=no -i private_key.pem myapp.tar ec2-user@18.206.155.178:/home/ec2-user/myapp.tar
 
       - name: Load and run Docker image on EC2
         env:
@@ -38,8 +43,6 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
           ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@18.206.155.178 '
-            sudo yum update -y &&
-            sudo yum install -y docker-compose &&
             docker load -i /home/ec2-user/myapp.tar &&
-            docker-compose -f /home/ec2-user/docker-compose.yml up -d
+            docker-compose up -d
           '
