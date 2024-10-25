@@ -1,5 +1,3 @@
-name: Build and Deploy
-
 on:
   push:
     branches:
@@ -44,4 +42,7 @@ jobs:
         run: |
           echo "$SSH_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
-          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@18.206.155.178 'docker load -i /home/ec2-user/myapp.tar && docker run -d -p 8080:8080 myapp:latest'
+          ssh -o StrictHostKeyChecking=no -i private_key.pem ec2-user@18.206.155.178 '
+            docker load -i /home/ec2-user/myapp.tar &&
+            docker-compose up -d
+          '

@@ -21,7 +21,6 @@ services:
     image: postgres:14
     restart: always
     environment:
-      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: swagimpoe123
       POSTGRES_DB: auth_db
     ports:
