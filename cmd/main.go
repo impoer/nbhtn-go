@@ -15,27 +15,37 @@ import (
 
 func main() {
 	host := os.Getenv("DATABASE_HOST")
-	port, _ := strconv.Atoi(os.Getenv("DATABASE_PORT"))
+	if host == "" {
+		host = "localhost"
+	}
+
+	portStr := os.Getenv("DATABASE_PORT")
+	port := 5432
+	if portStr != "" {
+		port, _ = strconv.Atoi(portStr)
+	}
+
 	user := os.Getenv("DATABASE_USER")
+	if user == "" {
+		user = "postgres"
+	}
+
 	password := os.Getenv("DATABASE_PASSWORD")
+	if password == "" {
+		password = "swagimpoe123"
+	}
+
 	dbname := os.Getenv("DATABASE_NAME")
+	if dbname == "" {
+		dbname = "auth_db"
+	}
 
-	// Логирование параметров подключения к базе данных
-	log.Println("Database Connection Parameters:")
-	log.Printf("Host: %s", host)
-	log.Printf("Port: %d", port)
-	log.Printf("User: %s", user)
-	log.Printf("Password: %s", password) // Будьте осторожны с логированием паролей!
-	log.Printf("Database Name: %s", dbname)
+	database := db.InitDB(host, port, user, password, dbname)
+	defer database.Close()
 
-	// Инициализация базы данных
-	database := db.InitDB(host, port, user, password, dbname) // Передаем port как int
-	defer database.Close()                                    // Закрыть соединение после использования
-
-	// Создание таблиц
 	db.CreateTables(database)
 
-	auth.SetDB(database) // Установить базу данных в пакет auth
+	auth.SetDB(database)
 
 	r := mux.NewRouter()
 
