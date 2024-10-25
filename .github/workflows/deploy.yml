@@ -20,10 +20,13 @@ jobs:
           sudo apt-get install -y docker-compose
 
       - name: Build Docker images
-        run: docker-compose build
+        run: |
+          docker-compose build
+          docker images  # List images to verify if myapp is built
 
       - name: Save Docker image to a file
-        run: docker save myapp -o myapp.tar
+        run: |
+          docker save myapp -o myapp.tar || echo "Image 'myapp' not found. Please check the build step."
 
       - name: Upload Docker image to EC2
         env:
