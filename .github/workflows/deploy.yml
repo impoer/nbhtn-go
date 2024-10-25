@@ -46,3 +46,4 @@ jobs:
             docker load -i /home/ec2-user/myapp.tar &&
             docker-compose up -d
           '
+          
